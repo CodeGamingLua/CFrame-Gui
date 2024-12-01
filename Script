@@ -1,0 +1,163 @@
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local Title = Instance.new("TextLabel")
+local Goto = Instance.new("TextButton")
+local UICorner_2 = Instance.new("UICorner")
+local Print = Instance.new("TextButton")
+local UICorner_3 = Instance.new("UICorner")
+local Save = Instance.new("TextButton")
+local UICorner_4 = Instance.new("UICorner")
+local CFRAME = Instance.new("CFrameValue")
+
+--Properties:
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.214018688, 0, 0.0537190065, 0)
+Frame.Size = UDim2.new(0, 406, 0, 338)
+
+CFRAME.Parent = Frame
+UICorner.Parent = Frame
+
+Title.Name = "Title"
+Title.Parent = Frame
+Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Title.BackgroundTransparency = 1.000
+Title.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Title.BorderSizePixel = 0
+Title.Position = UDim2.new(0.197044328, 0, 0, 0)
+Title.Size = UDim2.new(0, 200, 0, 50)
+Title.Font = Enum.Font.SourceSans
+Title.Text = "CFRAME Gui"
+Title.TextColor3 = Color3.fromRGB(204, 204, 204)
+Title.TextScaled = true
+Title.TextSize = 14.000
+Title.TextWrapped = true
+
+Goto.Name = "Go to"
+Goto.Parent = Frame
+Goto.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Goto.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Goto.BorderSizePixel = 0
+Goto.Position = UDim2.new(0.224368244, 0, 0.193359107, 0)
+Goto.Size = UDim2.new(0, 200, 0, 50)
+Goto.Font = Enum.Font.SourceSans
+Goto.Text = "Go to current CFrame"
+Goto.TextColor3 = Color3.fromRGB(0, 0, 0)
+Goto.TextSize = 14.000
+
+UICorner_2.Parent = Goto
+
+Print.Name = "Print"
+Print.Parent = Frame
+Print.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Print.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Print.BorderSizePixel = 0
+Print.Position = UDim2.new(0.225090891, 0, 0.397598892, 0)
+Print.Size = UDim2.new(0, 200, 0, 50)
+Print.Font = Enum.Font.SourceSans
+Print.Text = "Print Cframe"
+Print.TextColor3 = Color3.fromRGB(0, 0, 0)
+Print.TextSize = 14.000
+
+UICorner_3.Parent = Print
+
+Save.Name = "Save"
+Save.Parent = Frame
+Save.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Save.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Save.BorderSizePixel = 0
+Save.Position = UDim2.new(0.224174768, 0, 0.625409544, 0)
+Save.Size = UDim2.new(0, 200, 0, 50)
+Save.Font = Enum.Font.SourceSans
+Save.Text = "Save current CFrame"
+Save.TextColor3 = Color3.fromRGB(0, 0, 0)
+Save.TextSize = 14.000
+
+UICorner_4.Parent = Save
+
+-- Scripts:
+
+local function LKPYXW_fake_script() -- Goto.LocalScript 
+	local script = Instance.new('LocalScript', Goto)
+
+	local part = game.Players.LocalPlayer.Character.HumanoidRootPart
+	script.Parent.MouseButton1Click:Connect(function()
+		part.CFrame = script.Parent.Parent.CFRAME.Value
+	end)
+end
+coroutine.wrap(LKPYXW_fake_script)()
+local function EUCDXJ_fake_script() -- Print.LocalScript 
+	local script = Instance.new('LocalScript', Print)
+
+	local player = game.Players.LocalPlayer
+	local character = player.Character
+	local humanoid = character:FindFirstChild("Humanoid")
+	local humanoidrootpart = character:FindFirstChild("HumanoidRootPart")
+	
+	local function printcframe()
+		print(humanoidrootpart.CFrame)
+	end
+	
+	script.Parent.MouseButton1Click:Connect(printcframe)
+end
+coroutine.wrap(EUCDXJ_fake_script)()
+local function ZWOLN_fake_script() -- Save.LocalScript 
+	local script = Instance.new('LocalScript', Save)
+
+	local part = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+	script.Parent.MouseButton1Click:Connect(function()
+		script.Parent.Parent.CFRAME.Value = part.CFrame
+	end)
+end
+coroutine.wrap(ZWOLN_fake_script)()
+local function SMCK_fake_script() -- Frame.DraggableGUI 
+	local script = Instance.new('LocalScript', Frame)
+
+	local UIS = game:GetService('UserInputService')
+	local frame = script.Parent
+	local dragToggle = nil
+	local dragSpeed = 0.25
+	local dragStart = nil
+	local startPos = nil
+	
+	local function updateInput(input)
+		local delta = input.Position - dragStart
+		local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+			startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		game:GetService('TweenService'):Create(frame, TweenInfo.new(dragSpeed), {Position = position}):Play()
+	end
+	
+	frame.InputBegan:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then 
+			dragToggle = true
+			dragStart = input.Position
+			startPos = frame.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragToggle = false
+				end
+			end)
+		end
+	end)
+	
+	UIS.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			if dragToggle then
+				updateInput(input)
+			end
+			CFRAME.Name = "CFRAME"
+		end
+	end)
+end
+coroutine.wrap(SMCK_fake_script)()
